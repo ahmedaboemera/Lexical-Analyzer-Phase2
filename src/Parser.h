@@ -16,13 +16,25 @@
 #include <map>
 
 using namespace std;
-
-static vector<string> terminals;
-static vector<string> non_terminals;
-static vector<vector<vector<string> > >non_terminal_defs;
-
-void get_terminals_and_nonterminals(vector<string>* lines);
-
-
-
+class Parser {
+public:
+	Parser();
+	string starting;
+	vector<string>* terminals;
+	vector<string>* non_terminals;
+	vector<vector<vector<string> > >* non_terminal_defs;
+	void get_terminals_and_nonterminals(vector<string>* lines);
+	bool is_terminal(string s);
+	bool is_non_terminal(string s);
+	string get_starting();
+	vector<vector<string> > get_def(string s);
+private:
+	void fill_map(vector<string>* lines);
+	void finalize(vector<vector<string> > non_t_defs);
+	vector<string> split(string s, int start, char regex);
+	int get_eq(string s);
+	vector<string>* get_terminals(string s);
+	string get_nonterminal(string s);
+	string trim(string s);
+};
 #endif /* PARSER_H_ */

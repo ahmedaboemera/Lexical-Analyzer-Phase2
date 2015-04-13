@@ -13,6 +13,7 @@
 #include <cstring>
 
 #include "Parser.h"
+#include "Eliminator.h"
 
 using namespace std;
 
@@ -40,6 +41,11 @@ vector<string>* modify_file(const char* file_path) {
 }
 
 int main() {
-	vector<string>* modified = modify_file("src/CFG.txt");
-	get_terminals_and_nonterminals(modified);
+	vector<string>* modified = modify_file("src/CFG2.txt");
+	Parser* p = new Parser();
+	p->get_terminals_and_nonterminals(modified);
+//	cout<<terminals->size()<<endl;
+//	cout<<non_terminals->size()<<endl;
+	Eliminator* e = new Eliminator(p);
+	e->eliminate_LR();
 }

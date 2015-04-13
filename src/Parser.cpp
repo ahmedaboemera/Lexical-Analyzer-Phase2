@@ -1,7 +1,11 @@
-
 #include "Parser.h"
 
-string trim(string s) {
+Parser::Parser() {
+	non_terminals = new vector<string>();
+	terminals = new vector<string>();
+	non_terminal_defs = new vector<vector<vector<string> > >();
+}
+string Parser::trim(string s) {
 	string ans = "";
 	for (unsigned int i = 0; i < strlen(&s[0]); i++) {
 		if (s[i] != ' ') {
@@ -11,7 +15,7 @@ string trim(string s) {
 	return ans;
 }
 
-string get_nonterminal(string s) {
+string Parser::get_nonterminal(string s) {
 	string x;
 	for (unsigned int i = 2; s[i] != ' '; i++) {
 		x += s[i];
@@ -19,7 +23,7 @@ string get_nonterminal(string s) {
 	return x;
 }
 
-vector<string>* get_terminals(string s) {
+vector<string>* Parser::get_terminals(string s) {
 	vector<string>* x = new vector<string>();
 	string to_add;
 	bool add = 0;
@@ -47,62 +51,100 @@ vector<string>* get_terminals(string s) {
 	return x;
 }
 
-
-int get_eq(string s){
-	int i =0;
-	for (; s[i] != '='; i++);
+int Parser::get_eq(string s) {
+	int i = 0;
+	for (; s[i] != '='; i++)
+		;
 	return i;
 }
 
-vector<string> split(string s, int start, char regex){
+vector<string> Parser::split(string s, int start, char regex) {
 	int begin = start, end = start;
 	vector<string> vec;
 
 	for (int i = start; i < (strlen(&s[0])); i++) {
-		if(s[i] == regex){
+		if (s[i] == regex) {
 			end = i;
-			string x = s.substr(start, end-start);
+			string x = s.substr(start, end - start);
 			vec.push_back(x);
-			start = end+1;
-			end =start;
+			start = end + 1;
+			end = start;
 		}
 	}
-	vec.push_back(s.substr(start, strlen(&s[0])-start));
+	vec.push_back(s.substr(start, strlen(&s[0]) - start));
 
 	return vec;
 }
 
-void finalize(vector<vector<string> > non_t_defs){
-	for(int i = 0; i < non_t_defs.size(); i++){
+void Parser::finalize(vector<vector<string> > non_t_defs) {
+	for (int i = 0; i < non_t_defs.size(); i++) {
 		vector<vector<string> > x;
-		for(int j = 0; j < non_t_defs.at(i).size(); j++){
-			x.push_back(split(non_t_defs.at(i).at(j), 0,' '));
+		for (int j = 0; j < non_t_defs.at(i).size(); j++) {
+			x.push_back(split(non_t_defs.at(i).at(j), 0, ' '));
 		}
-		non_terminal_defs.push_back(x);
+		Parser::non_terminal_defs->push_back(x);
 	}
 }
 
-void fill_map(vector<string>* lines){
+void Parser::fill_map(vector<string>* lines) {
 	vector<vector<string> > non_t_defs;
-	for(vector<string>::iterator it = lines->begin(); it != lines->end(); it++){
+	for (vector<string>::iterator it = lines->begin(); it != lines->end();
+			it++) {
 		int equal = get_eq(*it);
-		vector<string> returned = split(*it,equal+1,'|');
+		vector<string> returned = split(*it, equal + 1, '|');
 		non_t_defs.push_back(returned);
 	}
 	finalize(non_t_defs);
 }
 
-void get_terminals_and_nonterminals(vector<string>* lines) {
+void Parser::get_terminals_and_nonterminals(vector<string>* lines) {
+	int i =-1;
 	for (vector<string>::iterator it = lines->begin(); it != lines->end();
 			it++) {
+		i++;
 		string x = get_nonterminal(*it);
-		non_terminals.push_back(x);
+		non_terminals->push_back(x);
+		if(i == 0){
+			starting =x;
+		}
 		vector<string>* y = get_terminals(*it);
 		for (vector<string>::iterator it = y->begin(); it != y->end(); it++) {
-			non_terminals.push_back((*it));
+			terminals->push_back((*it));
 		}
 	}
 
 	fill_map(lines);
 }
 
+bool Parser::is_terminal(string s) {
+	for (int i = 0; i < terminals->size(); i++) {
+		if (s.compare(terminals->at(i)) == 0) {
+			return true;
+		}
+	}
+	return false;
+}
+bool Parser::is_non_terminal(string s) {
+	for (int i = 0; i < non_terminals->size(); i++) {
+		if (s.compare(non_terminals->at(i)) == 0) {
+			return true;
+		}
+	}
+	return false;
+}
+string Parser::get_starting() {
+	return starting;
+}
+vector<vector<string> > Parser::get_def(string s) {
+	int index = -1;
+	for (int i = 0; i < non_terminals->size(); i++) {
+		if (s.compare(non_terminals->at(i)) == 0) {
+			index = i;
+			break;
+		}
+	}
+	if(index == -1){
+		throw new exception("input string is a terminal");
+	}
+	return non_terminal_defs->at(index);
+}

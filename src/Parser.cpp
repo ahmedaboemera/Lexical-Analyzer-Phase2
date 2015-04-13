@@ -7,25 +7,25 @@ Parser::Parser() {
 }
 string Parser::trim(string x) {
 	if (x.compare("") == 0)
-			return x;
+		return x;
 
-		unsigned int i;
-		for (i = 0; i < x.length() && x.at(i) == ' '; i++)
-			;
+	unsigned int i;
+	for (i = 0; i < x.length() && x.at(i) == ' '; i++)
+		;
 
-		if (i == x.length())
-			return "";
+	if (i == x.length())
+		return "";
 
-		unsigned int j;
-		for (j = x.length() - 1; j >= 0 && x.at(j) == ' '; j--)
-			;
+	unsigned int j;
+	for (j = x.length() - 1; j >= 0 && x.at(j) == ' '; j--)
+		;
 
-		string toRet = "";
-		unsigned int k;
-		for (k = i; k <= j; k++)
-			toRet += x.at(k);
+	string toRet = "";
+	unsigned int k;
+	for (k = i; k <= j; k++)
+		toRet += x.at(k);
 
-		return toRet;
+	return toRet;
 }
 
 string Parser::get_nonterminal(string s) {
@@ -49,7 +49,8 @@ vector<string>* Parser::get_terminals(string s) {
 		} else {
 			if ((int) s[i] == -103 | (int) s[i] == -104) {
 				add = false;
-				x->push_back(trim(to_add));
+				if (trim(to_add).compare("") != 0)
+					x->push_back(trim(to_add));
 				to_add = "";
 			} else {
 				if (s[i] == -104) {
@@ -60,7 +61,8 @@ vector<string>* Parser::get_terminals(string s) {
 			}
 		}
 	}
-	x->push_back(trim(to_add));
+	if (trim(to_add).compare("") != 0)
+		x->push_back(trim(to_add));
 	return x;
 }
 
@@ -79,12 +81,14 @@ vector<string> Parser::split(string s, int start, char regex) {
 		if (s[i] == regex) {
 			end = i;
 			string x = s.substr(start, end - start);
-			vec.push_back(trim(x));
+			if (trim(x).compare("") != 0)
+				vec.push_back(trim(x));
 			start = end + 1;
 			end = start;
 		}
 	}
-	vec.push_back(s.substr(start, strlen(&s[0]) - start));
+	if (trim(s.substr(start, strlen(&s[0]) - start)).compare("") != 0)
+		vec.push_back(s.substr(start, strlen(&s[0]) - start));
 
 	return vec;
 }
@@ -111,18 +115,20 @@ void Parser::fill_map(vector<string>* lines) {
 }
 
 void Parser::get_terminals_and_nonterminals(vector<string>* lines) {
-	int i =-1;
+	int i = -1;
 	for (vector<string>::iterator it = lines->begin(); it != lines->end();
 			it++) {
 		i++;
 		string x = get_nonterminal(*it);
-		non_terminals->push_back(trim(x));
-		if(i == 0){
-			starting =x;
+		if(trim(x).compare("")!=0)
+			non_terminals->push_back(trim(x));
+		if (i == 0) {
+			starting = x;
 		}
 		vector<string>* y = get_terminals(*it);
 		for (vector<string>::iterator it = y->begin(); it != y->end(); it++) {
-			terminals->push_back(trim((*it)));
+			if(trim((*it)).compare("")!=0)
+				terminals->push_back(trim((*it)));
 		}
 	}
 
@@ -156,7 +162,7 @@ vector<vector<string> > Parser::get_def(string s) {
 			break;
 		}
 	}
-	if(index == -1){
+	if (index == -1) {
 		throw new exception();
 	}
 	return non_terminal_defs->at(index);

@@ -35,6 +35,6 @@ private:
 	int get_eq(string s);
 	vector<string>* get_terminals(string s);
 	string get_nonterminal(string s);
-	string trim(string s);
+	string trim(string x);
 };
 #endif /* PARSER_H_ */

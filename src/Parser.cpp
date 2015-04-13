@@ -5,14 +5,27 @@ Parser::Parser() {
 	terminals = new vector<string>();
 	non_terminal_defs = new vector<vector<vector<string> > >();
 }
-string Parser::trim(string s) {
-	string ans = "";
-	for (unsigned int i = 0; i < strlen(&s[0]); i++) {
-		if (s[i] != ' ') {
-			ans += s[i];
-		}
-	}
-	return ans;
+string Parser::trim(string x) {
+	if (x.compare("") == 0)
+			return x;
+
+		unsigned int i;
+		for (i = 0; i < x.length() && x.at(i) == ' '; i++)
+			;
+
+		if (i == x.length())
+			return "";
+
+		unsigned int j;
+		for (j = x.length() - 1; j >= 0 && x.at(j) == ' '; j--)
+			;
+
+		string toRet = "";
+		unsigned int k;
+		for (k = i; k <= j; k++)
+			toRet += x.at(k);
+
+		return toRet;
 }
 
 string Parser::get_nonterminal(string s) {
@@ -66,7 +79,7 @@ vector<string> Parser::split(string s, int start, char regex) {
 		if (s[i] == regex) {
 			end = i;
 			string x = s.substr(start, end - start);
-			vec.push_back(x);
+			vec.push_back(trim(x));
 			start = end + 1;
 			end = start;
 		}
@@ -103,13 +116,13 @@ void Parser::get_terminals_and_nonterminals(vector<string>* lines) {
 			it++) {
 		i++;
 		string x = get_nonterminal(*it);
-		non_terminals->push_back(x);
+		non_terminals->push_back(trim(x));
 		if(i == 0){
 			starting =x;
 		}
 		vector<string>* y = get_terminals(*it);
 		for (vector<string>::iterator it = y->begin(); it != y->end(); it++) {
-			terminals->push_back((*it));
+			terminals->push_back(trim((*it)));
 		}
 	}
 
@@ -144,7 +157,7 @@ vector<vector<string> > Parser::get_def(string s) {
 		}
 	}
 	if(index == -1){
-		throw new exception("input string is a terminal");
+		throw new exception();
 	}
 	return non_terminal_defs->at(index);
 }

@@ -16,6 +16,7 @@ public:
 	Eliminator(Parser* p);
 	void eliminate_LF() ;
 	void eliminate_LR();
+	void print_grammer();
 private:
 	int find_index(string s);
 	vector<vector<string > > replace(int i);

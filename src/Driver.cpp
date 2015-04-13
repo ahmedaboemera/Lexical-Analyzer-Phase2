@@ -41,7 +41,7 @@ vector<string>* modify_file(const char* file_path) {
 }
 
 int main() {
-	vector<string>* modified = modify_file("src/CFG2.txt");
+	vector<string>* modified = modify_file("src/CFG.txt");
 	Parser* p = new Parser();
 	p->get_terminals_and_nonterminals(modified);
 //	cout<<terminals->size()<<endl;

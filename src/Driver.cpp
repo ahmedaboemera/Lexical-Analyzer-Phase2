@@ -48,4 +48,5 @@ int main() {
 //	cout<<non_terminals->size()<<endl;
 	Eliminator* e = new Eliminator(p);
 	e->eliminate_LR();
+	e->eliminate_LF();
 }

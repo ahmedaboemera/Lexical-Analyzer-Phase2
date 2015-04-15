@@ -120,14 +120,14 @@ void Parser::get_terminals_and_nonterminals(vector<string>* lines) {
 			it++) {
 		i++;
 		string x = get_nonterminal(*it);
-		if(trim(x).compare("")!=0)
+		if (trim(x).compare("") != 0)
 			non_terminals->push_back(trim(x));
 		if (i == 0) {
 			starting = x;
 		}
 		vector<string>* y = get_terminals(*it);
 		for (vector<string>::iterator it = y->begin(); it != y->end(); it++) {
-			if(trim((*it)).compare("")!=0)
+			if (trim((*it)).compare("") != 0)
 				terminals->push_back(trim((*it)));
 		}
 	}
@@ -136,8 +136,17 @@ void Parser::get_terminals_and_nonterminals(vector<string>* lines) {
 }
 
 bool Parser::is_terminal(string s) {
+	string tempo = "";
+	if ((int) s[0] < 0) {
+		for (int i = 1; i < strlen(&s[0]) - 1; i++) {
+			if ((int) s[i] > 0)
+				tempo += s[i];
+		}
+	}else{
+		tempo = s;
+	}
 	for (int i = 0; i < terminals->size(); i++) {
-		if (s.compare(terminals->at(i)) == 0) {
+		if (tempo.compare(terminals->at(i)) == 0) {
 			return true;
 		}
 	}
@@ -163,6 +172,7 @@ vector<vector<string> > Parser::get_def(string s) {
 		}
 	}
 	if (index == -1) {
+		cout << s << " ana hena" << endl;
 		throw new exception();
 	}
 	return non_terminal_defs->at(index);

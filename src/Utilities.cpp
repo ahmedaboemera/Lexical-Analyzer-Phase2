@@ -1,3 +1,4 @@
+/*
 
 #include "Utilities.h"
 
@@ -51,3 +52,4 @@ map<string, vector<string>> Utilities::compute_first(vector<string> non_terminal
 
 	}
 }
+*/

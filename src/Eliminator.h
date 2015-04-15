@@ -18,6 +18,10 @@ public:
 	void eliminate_LR();
 	void print_grammer();
 private:
+	bool find (vector<string>* taken, string s);
+	vector<vector<int> > get_left_factors(int index);
+	void eliminate_LF(int index) ;
+	bool probe_for_lf(int index);
 	int find_index(string s);
 	vector<vector<string > > replace(int i);
 	void eliminate_from_updated(vector<vector<string> > replaced, int index);

@@ -1,4 +1,1 @@
-# EE = EE + T
-| T
-# T = T * F | F
-# F = ‘id’ |  ‘(’ EE ‘)’
+# EE = A bb | A cc | b dd | A

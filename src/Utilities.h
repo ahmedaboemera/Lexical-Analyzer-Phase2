@@ -1,10 +1,3 @@
-/*
-
- * Parser.h
- *
- *  Created on: 12 Apr 2015
- *  Author: omarbarakat
-
 
 #ifndef UTILITIES_H_
 #define UTILITIES_H_
@@ -26,4 +19,3 @@ class Utilities{
 
 
 #endif  UTILITIES_H_
-*/

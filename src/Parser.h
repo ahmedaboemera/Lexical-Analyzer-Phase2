@@ -27,8 +27,10 @@ public:
 	bool is_terminal(string s);
 	bool is_non_terminal(string s);
 	string get_starting();
+	map<string,map<string, vector<string>>> built_predictive_table();
 	vector<vector<string> > get_def(string s);
 private:
+	Utilities util;
 	void fill_map(vector<string>* lines);
 	void finalize(vector<vector<string> > non_t_defs);
 	vector<string> split(string s, int start, char regex);
